@@ -8,8 +8,14 @@ import PyPDF2
 import pyttsx3
 import speech_recognition as sr
 import wikipedia
+from email.message import EmailMessage
 
-dict = {"panav": "panav3.saxena@gmail.com", "dad":"hiren.saxena@gmail.com", "mom": "shihir_20012002@yahoo.co.in"}
+email_list = {
+    'dad': 'hiren.saxena@gmail.com',
+    'mom': 'raginisaxena7118@gmail.com',
+    'me': 'panav3.saxena@gmail.com',
+    'me1': 'panavsaxena.panav@gmail.com',
+}
 
 engine = pyttsx3.init('sapi5')
 voices = engine.getProperty('voices')
@@ -44,13 +50,36 @@ def takeCommand(ask = False):
         return "none"
     return query
 
-def sendEmail(to,content):
+def send_email(receiver, subject, message):
     server = smtplib.SMTP('smtp.gmail.com', 587)
-    server.ehlo()
     server.starttls()
+    # Make sure to give app access in your Google account
     server.login('panav3.saxena@gmail.com', 'Sanavpaxena24')
-    server.sendmail('panav3.saxena@gmail.com',to,content)
-    server.close()
+    email = EmailMessage()
+    email['From'] = 'panav3.saxena@gmail.com'
+    email['To'] = receiver
+    email['Subject'] = subject
+    email.set_content(message)
+    server.send_message(email)
+
+def get_email_info():
+    speak('To Whom you want to send email')
+    name = takeCommand()
+    receiver = email_list[name]
+    print(receiver)
+    speak('What is the subject of your email?')
+    subject = takeCommand()
+    speak('Tell me the text in your email')
+    message = takeCommand()
+    send_email(receiver, subject, message)
+    speak('Hey lazy ass. Your email is sent')
+    speak('Do you want to send more email?')
+    send_more = takeCommand()
+    if 'yes' in send_more:
+        get_email_info()
+
+
+
 
 if __name__ == '__main__':
     wishMe()
@@ -120,26 +149,5 @@ if __name__ == '__main__':
         elif 'what is your name' in query:
             speak("My name is FRIDAY.. I am your personal voice assistant.")
 
-        elif "email me" in query:
-            try:
-                speak("What should I send?")
-                content = takeCommand()
-                to = "panavsaxena.panav@gmail.com"
-                sendEmail(to,content)
-                speak('Email Sent')
-            except Exception as e:
-                print(e)
-                speak("Sorry.. Email not sent")        
-        elif "email mom" in query:
-            try:
-                speak("What should I send?")
-                content = takeCommand()
-                to = "shihir_20012002@yahoo.co.in"
-                sendEmail(to,content)
-                speak('Email Sent')
-            except Exception as e:
-                print(e)
-                speak("Sorry.. Email not sent")
-
-        elif "gta" in query:
-            os.startfile("C:\\Users\\panav\\OneDrive\\Desktop")
+        elif "send email" in query:
+            get_email_info()
