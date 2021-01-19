@@ -87,14 +87,17 @@ if __name__ == '__main__':
     while 1:
         query = takeCommand().lower()
         if "wikipedia" in query:
-            # noinspection PyTypeChecker
-            wiki = takeCommand("what do you want to search for?")
-            url = 'https://google.com/search?q=' + wiki
-            webbrowser.get().open(url)
-            results = wikipedia.summary(wiki, sentences = 2)
-            speak("according to wikipedia")
-            print(results)
-            speak(results)
+            try:
+                # noinspection PyTypeChecker
+                wiki = takeCommand("what do you want to search for?")
+                url = 'https://google.com/search?q=' + wiki
+                webbrowser.get().open(url)
+                results = wikipedia.summary(wiki, sentences = 2)
+                speak("according to wikipedia")
+                print(results)
+                speak(results)
+            except:
+                speak("No results were found")
         elif "open youtube" in query:
             webbrowser.get().open("youtube.com")
         elif "open google" in query:
