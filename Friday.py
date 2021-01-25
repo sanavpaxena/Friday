@@ -54,7 +54,7 @@ def send_email(receiver, subject, message):
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.starttls()
     # Make sure to give app access in your Google account
-    server.login('panav3.saxena@gmail.com', 'Sanavpaxena24')
+    server.login('your email id', 'Your password')
     email = EmailMessage()
     email['From'] = 'panav3.saxena@gmail.com'
     email['To'] = receiver
